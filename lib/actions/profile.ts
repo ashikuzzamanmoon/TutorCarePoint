@@ -73,12 +73,27 @@ export async function updateProfile(
     return { ok: false, error: parsed.error.issues[0]?.message ?? "তথ্য যাচাই করুন" };
   }
   const data = parsed.data;
+  const phone = normalizePhone(data.phone);
+
+  // Check if another tutor already uses this phone number
+  const existingPhone = await prisma.tutorProfile.findFirst({
+    where: {
+      phone,
+      NOT: { userId: user.id },
+    },
+  });
+  if (existingPhone) {
+    return {
+      ok: false,
+      error: "এই মোবাইল নম্বরটি ইতিমধ্যে অন্য একটি টিউটর প্রোফাইলে ব্যবহার করা হচ্ছে।",
+    };
+  }
 
   await prisma.tutorProfile.upsert({
     where: { userId: user.id },
     update: {
       displayName: data.displayName,
-      phone: normalizePhone(data.phone),
+      phone,
       district: data.district,
       area: data.area ?? null,
       gender: data.gender,
@@ -95,7 +110,7 @@ export async function updateProfile(
     create: {
       userId: user.id,
       displayName: data.displayName,
-      phone: normalizePhone(data.phone),
+      phone,
       district: data.district,
       area: data.area ?? null,
       gender: data.gender,

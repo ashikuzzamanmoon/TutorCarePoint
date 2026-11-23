@@ -51,10 +51,21 @@ export async function registerTutor(
   }
   const data = parsed.data;
   const email = data.email.toLowerCase();
+  const phone = normalizePhone(data.phone);
 
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) {
+  const existingEmail = await prisma.user.findUnique({ where: { email } });
+  if (existingEmail) {
     return { ok: false, error: "এই ইমেইল দিয়ে ইতিমধ্যে অ্যাকাউন্ট আছে। লগ ইন করুন।" };
+  }
+
+  const existingPhone = await prisma.tutorProfile.findFirst({
+    where: { phone },
+  });
+  if (existingPhone) {
+    return {
+      ok: false,
+      error: "এই মোবাইল নম্বর দিয়ে ইতিমধ্যে একটি টিউটর অ্যাকাউন্ট রয়েছে। অনুগ্রহ করে লগ ইন করুন।",
+    };
   }
 
   const passwordHash = await bcrypt.hash(data.password, 12);
@@ -67,7 +78,7 @@ export async function registerTutor(
       tutorProfile: {
         create: {
           displayName: data.name,
-          phone: normalizePhone(data.phone),
+          phone,
           district: data.district,
           gender: data.gender,
           educationLevel: data.educationLevel,
