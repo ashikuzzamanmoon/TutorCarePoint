@@ -44,7 +44,7 @@ export default async function AdminOverviewPage() {
   const stats = [
     { label: "মোট টিউটর", value: tutorCount, href: "/admin/tutors" },
     { label: "যাচাইকৃত টিউটর", value: verifiedTutorCount, href: "/admin/tutors" },
-    { label: "খোলা টিউশন", value: openJobCount, href: "/admin/jobs?status=OPEN" },
+    { label: "সক্রিয় টিউশন", value: openJobCount, href: "/admin/jobs?status=OPEN" },
     { label: "যাচাইয়ের অপেক্ষায়", value: pendingJobCount, href: "/admin/jobs?status=PENDING_REVIEW" },
     { label: "নিয়োগ সম্পন্ন", value: filledJobCount, href: "/admin/jobs?status=FILLED" },
   ];

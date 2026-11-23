@@ -304,7 +304,7 @@ export default async function HomePage() {
             <div className="flex items-center gap-2">
               <h2 className="text-2xl font-bold text-stone-900 sm:text-3xl">সাম্প্রতিক টিউশন</h2>
               {recentJobs.length > 0 ? (
-                <Badge tone="green">{recentJobs.length.toLocaleString("bn-BD")}টি টিউশন খোলা</Badge>
+                <Badge tone="green">{recentJobs.length.toLocaleString("bn-BD")}টিতে আবেদন চলছে</Badge>
               ) : null}
             </div>
             <p className="mt-1 text-sm text-stone-500">

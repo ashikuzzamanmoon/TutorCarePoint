@@ -74,7 +74,7 @@ export default async function JobsPage({
     <div className="mx-auto max-w-6xl px-4 py-8">
       <SectionTitle
         title="টিউশন খুঁজুন"
-        subtitle="খোলা টিউশনগুলো — ৩০ দিনের পুরনো পোস্ট স্বয়ংক্রিয়ভাবে সরিয়ে ফেলা হয়।"
+        subtitle="চলতি টিউশনগুলো — ৩০ দিনের পুরনো পোস্ট স্বয়ংক্রিয়ভাবে সরিয়ে ফেলা হয়।"
       />
       <JobFilters values={params} />
       <p className="mt-6 text-sm text-stone-500">

@@ -45,7 +45,7 @@ export function JobReviewActions({ jobId }: { jobId: string }) {
 }
 
 const JOB_STATUS_OPTIONS: { value: JobStatus; label: string }[] = [
-  { value: "OPEN", label: "খোলা আছে (আবার প্রকাশ)" },
+  { value: "OPEN", label: "আবেদন চলছে (আবার প্রকাশ)" },
   { value: "FILLED", label: "নিয়োগ সম্পন্ন" },
   { value: "EXPIRED", label: "মেয়াদ শেষ" },
   { value: "CANCELLED", label: "বাতিল" },

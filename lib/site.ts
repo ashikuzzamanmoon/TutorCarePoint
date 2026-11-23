@@ -183,7 +183,7 @@ export const GENDER_LABELS: Record<Gender, string> = {
 
 export const JOB_STATUS_LABELS: Record<JobStatus, string> = {
   PENDING_REVIEW: "যাচাই চলছে",
-  OPEN: "খোলা আছে",
+  OPEN: "আবেদন চলছে",
   FILLED: "নিয়োগ সম্পন্ন",
   EXPIRED: "মেয়াদ শেষ",
   CANCELLED: "বাতিল",
