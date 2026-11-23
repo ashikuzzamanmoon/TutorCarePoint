@@ -20,7 +20,7 @@ const STEPS = [
     title: "পোস্ট বা আবেদন",
     body: "অভিভাবক কোনো অ্যাকাউন্ট ছাড়াই টিউশনের চাহিদা জানান। টিউটররা জব বোর্ড থেকে উপযুক্ত টিউশনে আবেদন করেন।",
     icon: (
-      <svg className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <svg className="h-6 w-6 transition-colors group-hover:text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
       </svg>
     ),
@@ -30,7 +30,7 @@ const STEPS = [
     title: "যাচাই ও শর্টলিস্ট",
     body: "আমরা অভিভাবকের সাথে ফোনে কথা বলে চাহিদা যাচাই করি এবং যোগ্য ও দায়িত্বশীল টিউটর শর্টলিস্ট করি।",
     icon: (
-      <svg className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <svg className="h-6 w-6 transition-colors group-hover:text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
       </svg>
     ),
@@ -40,7 +40,7 @@ const STEPS = [
     title: "ফ্রি ডেমো ক্লাস",
     body: "শর্টলিস্ট হওয়া টিউটর একটি ফ্রি ডেমো ক্লাস নেন। উভয় পক্ষ সন্তুষ্ট হলে টিউশনটি নিশ্চিত করা হয়।",
     icon: (
-      <svg className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <svg className="h-6 w-6 transition-colors group-hover:text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" />
       </svg>
     ),
@@ -50,7 +50,7 @@ const STEPS = [
     title: "নিশ্চিত ও সরাসরি যোগাযোগ",
     body: "কনফার্ম হলে আমরা সরাসরি যোগাযোগ করিয়ে দিই। পারিশ্রমিক অভিভাবক সরাসরি টিউটরকেই প্রদান করেন।",
     icon: (
-      <svg className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <svg className="h-6 w-6 transition-colors group-hover:text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
       </svg>
     ),
