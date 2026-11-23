@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 
 interface SearchParams {
   district?: string;
+  upazila?: string;
   className?: string;
   subject?: string;
   medium?: string;
@@ -46,6 +47,7 @@ export default async function JobsPage({
   if (params.district && DISTRICT_KEYS.includes(params.district)) {
     where.district = params.district;
   }
+  if (params.upazila) where.upazila = params.upazila;
   if (params.className) where.className = params.className;
   if (params.subject) where.subjects = { has: params.subject };
   if (params.medium && (MEDIUMS as string[]).includes(params.medium)) {
@@ -75,6 +77,7 @@ export default async function JobsPage({
 
   const hasFilters = Boolean(
     params.district ||
+    params.upazila ||
     params.className ||
     params.subject ||
     params.medium ||

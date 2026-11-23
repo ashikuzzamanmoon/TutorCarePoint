@@ -52,8 +52,10 @@ export default async function AdminTutorsPage() {
                     >
                       {tutor.phone}
                     </a>{" "}
-                    · {districtName(tutor.district)}
-                    {tutor.area ? `, ${tutor.area}` : ""}
+                    ·{" "}
+                    {[tutor.area, tutor.upazila, districtName(tutor.district)]
+                      .filter(Boolean)
+                      .join(", ")}
                   </p>
                   <p className="text-sm text-stone-500">
                     {tutor.educationLevel}

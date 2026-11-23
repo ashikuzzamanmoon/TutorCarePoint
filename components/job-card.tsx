@@ -9,9 +9,9 @@ import type { Job } from "@prisma/client";
 import Link from "next/link";
 
 export function JobCard({ job }: { job: Job }) {
-  const location = job.area
-    ? `${job.area}, ${districtName(job.district)}`
-    : districtName(job.district);
+  const location = [job.area, job.upazila, districtName(job.district)]
+    .filter(Boolean)
+    .join(", ");
   const posted = job.publishedAt ?? job.createdAt;
 
   return (

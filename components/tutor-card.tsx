@@ -26,9 +26,9 @@ export function TutorCard({ tutor }: { tutor: TutorProfile }) {
               {tutor.institution ? `, ${tutor.institution}` : ""}
             </p>
             <p className="text-sm text-stone-500">
-              {tutor.area
-                ? `${tutor.area}, ${districtName(tutor.district)}`
-                : districtName(tutor.district)}
+              {[tutor.area, tutor.upazila, districtName(tutor.district)]
+                .filter(Boolean)
+                .join(", ")}
             </p>
           </div>
         </div>

@@ -15,13 +15,16 @@ import {
   DISTRICTS,
 } from "@/lib/site";
 import { showErrorAlert, showSuccessAlert } from "@/lib/alerts";
+import { getUpazilas } from "@/lib/upazilas";
 import type { TutorProfile } from "@prisma/client";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 const initialState: ActionResult = { ok: false };
 
 export function ProfileForm({ profile }: { profile: TutorProfile | null }) {
   const [state, action] = useActionState(updateProfile, initialState);
+  const [selectedDistrict, setSelectedDistrict] = useState(profile?.district ?? "");
+  const upazilas = getUpazilas(selectedDistrict);
 
   useEffect(() => {
     if (state.error) {
@@ -75,39 +78,63 @@ export function ProfileForm({ profile }: { profile: TutorProfile | null }) {
             className={inputClass}
           />
         </div>
-        <div>
-          <label htmlFor="district" className={labelClass}>
-            জেলা
-          </label>
-          <select
-            id="district"
-            name="district"
-            required
-            defaultValue={profile?.district ?? ""}
-            className={inputClass}
-          >
-            <option value="" disabled>
-              বেছে নিন
-            </option>
-            {DISTRICTS.map((u) => (
-              <option key={u.key} value={u.key}>
-                {u.bn}
+        <div className="sm:col-span-2 grid gap-4 sm:grid-cols-3">
+          <div>
+            <label htmlFor="district" className={labelClass}>
+              জেলা
+            </label>
+            <select
+              id="district"
+              name="district"
+              required
+              value={selectedDistrict}
+              onChange={(e) => setSelectedDistrict(e.target.value)}
+              className={inputClass}
+            >
+              <option value="" disabled>
+                বেছে নিন
               </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="area" className={labelClass}>
-            এলাকা / উপজেলা (ঐচ্ছিক)
-          </label>
-          <input
-            id="area"
-            name="area"
-            type="text"
-            defaultValue={profile?.area ?? ""}
-            placeholder="যেমন: কাজিপুর, মুজিব সড়ক"
-            className={inputClass}
-          />
+              {DISTRICTS.map((u) => (
+                <option key={u.key} value={u.key}>
+                  {u.bn}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="upazila" className={labelClass}>
+              উপজেলা
+            </label>
+            <select
+              id="upazila"
+              name="upazila"
+              defaultValue={profile?.upazila ?? ""}
+              disabled={!selectedDistrict}
+              className={inputClass}
+            >
+              <option value="">
+                {selectedDistrict ? "উপজেলা বেছে নিন" : "প্রথমে জেলা বেছে নিন"}
+              </option>
+              {upazilas.map((upz) => (
+                <option key={upz} value={upz}>
+                  {upz}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="area" className={labelClass}>
+              এলাকা (ঐচ্ছিক)
+            </label>
+            <input
+              id="area"
+              name="area"
+              type="text"
+              defaultValue={profile?.area ?? ""}
+              placeholder="যেমন: পাড়া/মহল্লা, রোড নম্বর"
+              className={inputClass}
+            />
+          </div>
         </div>
         <div>
           <label htmlFor="gender" className={labelClass}>

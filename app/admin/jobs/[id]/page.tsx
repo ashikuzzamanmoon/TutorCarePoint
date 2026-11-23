@@ -38,9 +38,9 @@ export default async function AdminJobDetailPage({
   });
   if (!job) notFound();
 
-  const location = job.area
-    ? `${job.area}, ${districtName(job.district)}`
-    : districtName(job.district);
+  const location = [job.area, job.upazila, districtName(job.district)]
+    .filter(Boolean)
+    .join(", ");
 
   return (
     <div>

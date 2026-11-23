@@ -29,6 +29,7 @@ const submitJobSchema = z.object({
     .refine((arr) => arr.every((s) => SUBJECTS.includes(s)), "বিষয় বেছে নিন"),
   medium: z.enum(["BANGLA", "ENGLISH_MEDIUM", "ENGLISH_VERSION", "MADRASA"]),
   district: z.string().refine((v) => DISTRICT_KEYS.includes(v), "জেলা বেছে নিন"),
+  upazila: z.string().max(100).optional(),
   area: z.string().max(100).optional(),
   salary: z.number().int().min(0).max(100000).nullable(),
   salaryNegotiable: z.boolean(),
@@ -56,6 +57,7 @@ export async function submitJob(
     subjects: formData.getAll("subjects"),
     medium: formData.get("medium"),
     district: formData.get("district"),
+    upazila: formData.get("upazila") || undefined,
     area: formData.get("area") || undefined,
     salary: Number.isFinite(salary) ? salary : null,
     salaryNegotiable: formData.get("salaryNegotiable") === "on",
@@ -68,7 +70,8 @@ export async function submitJob(
   }
   const data = parsed.data;
 
-  const title = `${data.className} — ${data.subjects.join(", ")} (${districtName(data.district)})`;
+  const locationTag = [data.upazila, districtName(data.district)].filter(Boolean).join(", ");
+  const title = `${data.className} — ${data.subjects.join(", ")} (${locationTag})`;
 
   await prisma.job.create({
     data: {
@@ -79,6 +82,7 @@ export async function submitJob(
       subjects: data.subjects,
       medium: data.medium,
       district: data.district,
+      upazila: data.upazila ?? null,
       area: data.area ?? null,
       salary: data.salaryNegotiable ? null : data.salary,
       salaryNegotiable: data.salaryNegotiable,

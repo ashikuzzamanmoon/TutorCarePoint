@@ -1,3 +1,5 @@
+"use client";
+
 import { inputClass, labelClass } from "@/components/ui";
 import {
   CLASSES,
@@ -8,10 +10,13 @@ import {
   SUBJECTS,
   DISTRICTS,
 } from "@/lib/site";
+import { getUpazilas } from "@/lib/upazilas";
 import Link from "next/link";
+import { useState } from "react";
 
 export interface JobFilterValues {
   district?: string;
+  upazila?: string;
   className?: string;
   subject?: string;
   medium?: string;
@@ -22,6 +27,8 @@ export interface JobFilterValues {
 
 // Plain GET form — works without JavaScript and keeps filters in the URL.
 export function JobFilters({ values }: { values: JobFilterValues }) {
+  const [selectedDistrict, setSelectedDistrict] = useState(values.district ?? "");
+  const upazilas = getUpazilas(selectedDistrict);
   return (
     <form
       method="get"
@@ -36,13 +43,35 @@ export function JobFilters({ values }: { values: JobFilterValues }) {
           <select
             id="district"
             name="district"
-            defaultValue={values.district ?? ""}
+            value={selectedDistrict}
+            onChange={(e) => setSelectedDistrict(e.target.value)}
             className={inputClass}
           >
             <option value="">সব জেলা</option>
             {DISTRICTS.map((u) => (
               <option key={u.key} value={u.key}>
                 {u.bn}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="upazila" className={labelClass}>
+            উপজেলা
+          </label>
+          <select
+            id="upazila"
+            name="upazila"
+            defaultValue={values.upazila ?? ""}
+            disabled={!selectedDistrict}
+            className={inputClass}
+          >
+            <option value="">
+              {selectedDistrict ? "সব উপজেলা" : "প্রথমে জেলা বেছে নিন"}
+            </option>
+            {upazilas.map((upz) => (
+              <option key={upz} value={upz}>
+                {upz}
               </option>
             ))}
           </select>

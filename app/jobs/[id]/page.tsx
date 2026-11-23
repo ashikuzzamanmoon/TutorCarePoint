@@ -74,9 +74,9 @@ export default async function JobDetailPage({
     alreadyApplied = !!existing;
   }
 
-  const location = job.area
-    ? `${job.area}, ${districtName(job.district)}`
-    : districtName(job.district);
+  const location = [job.area, job.upazila, districtName(job.district)]
+    .filter(Boolean)
+    .join(", ");
   const posted = job.publishedAt ?? job.createdAt;
 
   const jobPostingJsonLd = {

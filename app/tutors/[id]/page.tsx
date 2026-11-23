@@ -56,9 +56,9 @@ export default async function TutorDetailPage({
   const tutor = await getCachedTutorById(id);
   if (!tutor || !tutor.isPublished) notFound();
 
-  const location = tutor.area
-    ? `${tutor.area}, ${districtName(tutor.district)}`
-    : districtName(tutor.district);
+  const location = [tutor.area, tutor.upazila, districtName(tutor.district)]
+    .filter(Boolean)
+    .join(", ");
 
   const personJsonLd = {
     "@context": "https://schema.org",

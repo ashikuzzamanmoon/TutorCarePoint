@@ -135,7 +135,8 @@ model TutorProfile {
   // tutor is confirmed for that guardian's job. Never public.
   phone           String
   district        String // slug key, see DISTRICTS in lib/site.ts
-  area            String? // upazila / neighbourhood, free text
+  upazila         String? // upazila name in Bengali
+  area            String? // neighbourhood, road, free text
   educationLevel  String // e.g. "অনার্স ৩য় বর্ষ" or "বিএসসি সম্পন্ন"
   institution     String?
   subjects        String[]
@@ -153,6 +154,7 @@ model TutorProfile {
   applications Application[]
 
   @@index([district, isPublished])
+  @@index([district, upazila, isPublished])
   @@index([isPublished, isVerified])
 }
 
@@ -168,7 +170,8 @@ model Job {
   subjects          String[]
   medium            Medium    @default(BANGLA)
   district          String // slug key, see DISTRICTS in lib/site.ts
-  area              String? // upazila / neighbourhood, free text
+  upazila           String? // upazila name in Bengali
+  area              String? // neighbourhood, road, free text
   salary            Int? // monthly, BDT; null = negotiable
   salaryNegotiable  Boolean   @default(false)
   daysPerWeek       Int       @default(5)
@@ -184,6 +187,7 @@ model Job {
 
   @@index([status, publishedAt])
   @@index([district, status])
+  @@index([district, upazila, status])
 }
 
 model Application {

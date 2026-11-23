@@ -73,9 +73,10 @@ export default async function AdminJobsPage({
                     {job.title}
                   </Link>
                   <p className="mt-1 text-sm text-stone-500">
-                    {districtName(job.district)}
-                    {job.area ? `, ${job.area}` : ""} · অভিভাবক:{" "}
-                    {job.guardianName} · {job.guardianPhone} ·{" "}
+                    {[job.area, job.upazila, districtName(job.district)]
+                      .filter(Boolean)
+                      .join(", ")}{" "}
+                    · অভিভাবক: {job.guardianName} · {job.guardianPhone} ·{" "}
                     {job._count.applications.toLocaleString("bn-BD")}টি আবেদন
                     · {formatDate(job.createdAt)}
                   </p>

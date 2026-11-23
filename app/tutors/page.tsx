@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 
 interface SearchParams {
   district?: string;
+  upazila?: string;
   className?: string;
   subject?: string;
   verified?: string;
@@ -39,12 +40,14 @@ export default async function TutorsPage({
   if (params.district && DISTRICT_KEYS.includes(params.district)) {
     where.district = params.district;
   }
+  if (params.upazila) where.upazila = params.upazila;
   if (params.className) where.classes = { has: params.className };
   if (params.subject) where.subjects = { has: params.subject };
   if (params.verified === "1") where.isVerified = true;
 
   const hasFilters = Boolean(
     params.district ||
+    params.upazila ||
     params.className ||
     params.subject ||
     params.verified

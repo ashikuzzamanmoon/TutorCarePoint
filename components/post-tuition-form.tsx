@@ -14,13 +14,16 @@ import {
   SUBJECTS,
   DISTRICTS,
 } from "@/lib/site";
-import { useActionState } from "react";
+import { getUpazilas } from "@/lib/upazilas";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 
 const initialState: ActionResult = { ok: false };
 
 export function PostTuitionForm() {
   const [state, action] = useActionState(submitJob, initialState);
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const upazilas = getUpazilas(selectedDistrict);
 
   if (state.ok) {
     return (
@@ -109,32 +112,62 @@ export function PostTuitionForm() {
             ))}
           </select>
         </div>
-        <div>
-          <label htmlFor="district" className={labelClass}>
-            জেলা
-          </label>
-          <select id="district" name="district" required className={inputClass} defaultValue="">
-            <option value="" disabled>
-              বেছে নিন
-            </option>
-            {DISTRICTS.map((u) => (
-              <option key={u.key} value={u.key}>
-                {u.bn}
+        <div className="sm:col-span-2 grid gap-4 sm:grid-cols-3">
+          <div>
+            <label htmlFor="district" className={labelClass}>
+              জেলা
+            </label>
+            <select
+              id="district"
+              name="district"
+              required
+              className={inputClass}
+              value={selectedDistrict}
+              onChange={(e) => setSelectedDistrict(e.target.value)}
+            >
+              <option value="" disabled>
+                বেছে নিন
               </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="area" className={labelClass}>
-            এলাকা / উপজেলা (ঐচ্ছিক)
-          </label>
-          <input
-            id="area"
-            name="area"
-            type="text"
-            placeholder="যেমন: কাজিপুর, মুজিব সড়ক"
-            className={inputClass}
-          />
+              {DISTRICTS.map((u) => (
+                <option key={u.key} value={u.key}>
+                  {u.bn}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="upazila" className={labelClass}>
+              উপজেলা
+            </label>
+            <select
+              id="upazila"
+              name="upazila"
+              className={inputClass}
+              defaultValue=""
+              disabled={!selectedDistrict}
+            >
+              <option value="">
+                {selectedDistrict ? "উপজেলা বেছে নিন" : "প্রথমে জেলা বেছে নিন"}
+              </option>
+              {upazilas.map((upz) => (
+                <option key={upz} value={upz}>
+                  {upz}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="area" className={labelClass}>
+              এলাকা (ঐচ্ছিক)
+            </label>
+            <input
+              id="area"
+              name="area"
+              type="text"
+              placeholder="যেমন: পাড়া/মহল্লা, রোড নম্বর"
+              className={inputClass}
+            />
+          </div>
         </div>
         <div>
           <label htmlFor="salary" className={labelClass}>

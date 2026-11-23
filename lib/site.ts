@@ -117,6 +117,8 @@ export function districtName(key: string): string {
   return DISTRICTS.find((d) => d.key === key)?.bn ?? key;
 }
 
+export { UPAZILAS, getUpazilas } from "./upazilas";
+
 // ---------------------------------------------------------------------------
 // Classes, subjects, mediums, genders
 // ---------------------------------------------------------------------------
