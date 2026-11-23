@@ -9,8 +9,8 @@
 ---
 
 ## 2. Active Execution State
-- **Current Active Step:** Step 1 (Environment Setup & Database Connectivity)
-- **Last Completed Step:** Step 0 (Context Architecture Vault Integration & Verification)
+- **Current Active Step:** Step 4 (End-to-End Flow Validation in Local Runtime)
+- **Last Completed Step:** Step 3 (Full Codebase Build & Typecheck Gate)
 - **Active Blockers:** None
 
 ---
@@ -21,15 +21,18 @@
   - Prisma 7 + PostgreSQL স্কিমা ও মাইগ্রেশন তৈরি।
   - Auth.js v5 বেসড ক্রেডেনশিয়ালস ও রোল বেসড গার্ডস (Tutor/Admin)।
   - সকল পাবলিক পেজ, টিউটর ড্যাশবোর্ড ও অ্যাডমিন প্যানেল তৈরি।
-  - `tsc --noEmit` এবং `npm run build` ক্লিন পাস।
 - [x] **Milestone 1: Context Architecture Vault Locked (Completed Nov 23, 2026)**
   - `AGENTS.md` ও `vault/` আর্কিটেকচার ইন্টিগ্রেটেড।
   - PRD, STATE, TOKENS, STACK, SCHEMA, PLAN স্পেসিফিকেশন ফাইলগুলো প্রজেক্টের সাথে অ্যালাইন করা হয়েছে।
+- [x] **Milestone 2: Database Connectivity & Verification (Completed Nov 23, 2026)**
+  - Neon PostgreSQL ডাটাবেজের সাথে সংযোগ স্থাপন এবং `.env` কনফিগার সম্পন্ন।
+  - `20261122000000_init` মাইগ্রেশন সম্পূর্ণ ডাটাবেজে সফলভাবে প্রয়োগ।
+  - স্যাম্পল সিড ডেটা (অ্যাডমিন, টিউটর, জব ও অ্যাপ্লিকেশন) সফলভাবে লোড।
+  - `tsc --noEmit` এবং `next build` (Turbopack) সফলভাবে ক্লিন পাস।
 
 ---
 
 ## 4. Pending Execution Queue
-1. [ ] **Step 1:** `.env` কনফিগারেশন এবং লোকাল PostgreSQL ডাটাবেজে কানেকশন ও সিড ভেরিফিকেশন।
-2. [ ] **Step 2:** লোকাল ডেভেলপমেন্ট সার্ভারে অ্যান্ড-টু-অ্যান্ড ফ্লো স্মোক টেস্ট (টিউটর আবেদন, অ্যাডমিন রিভিউ, কন্টাক্ট রিভিল)।
-3. [ ] **Step 3:** গিট ইনিশিয়ালাইজেশন ও গিটহাব রিমোট পুশ।
-4. [ ] **Step 4:** Vercel ডেপ্লয়মেন্ট এবং প্রোডাকশন ডাটাবেজ মাইগ্রেশন।
+1. [ ] **Step 4:** লোকাল ডেভেলপমেন্ট সার্ভারে অ্যান্ড-টু-অ্যান্ড ফ্লো স্মোক টেস্ট (টিউটর আবেদন, অ্যাডমিন রিভিউ, কন্টাক্ট রিভিল)।
+2. [ ] **Step 5:** Git কমিট আপডেট ও গিটহাব রিমোট পুশ।
+3. [ ] **Step 6:** Vercel ডেপ্লয়মেন্ট এবং প্রোডাকশন ডাটাবেজ মাইগ্রেশন।

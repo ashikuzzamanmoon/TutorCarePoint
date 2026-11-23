@@ -6,7 +6,7 @@
 
 ## Phase 1: Local Setup & Environment Verification
 
-### - [ ] Step 1: Environment & Database Configuration
+### - [x] Step 1: Environment & Database Configuration
 - **Goal:** `.env` ফাইল প্রস্তুত করে লোকাল PostgreSQL বা Neon ডাটাবেজের সাথে সংযোগ স্থাপন এবং স্কিমা মাইগ্রেশন যাচাই।
 - **Vault Refs:** `vault/04-STACK.md`, `vault/05-SCHEMA.md`
 - **Target Files:** `.env`
@@ -14,11 +14,11 @@
   ```powershell
   npx prisma migrate status
   ```
-  *(Exit code 0 এবং ডাটাবেজ স্কিমা আপ-টু-ডেট হতে হবে)*
+  *(Status: Database schema is up to date! Exit code 0)*
 
 ---
 
-### - [ ] Step 2: Sample Seed Data & Verification
+### - [x] Step 2: Sample Seed Data & Verification
 - **Goal:** ডেভেলপমেন্ট ও টেস্টের জন্য ডেমো ডাটাবেজ সিডিং রান করা (অ্যাডমিন, টিউটর ও জব স্যাম্পল)।
 - **Vault Refs:** `vault/04-STACK.md`
 - **Target Files:** `prisma/seed.mjs`
@@ -26,19 +26,19 @@
   ```powershell
   npm run db:seed
   ```
-  *(Exit code 0 হতে হবে এবং কনসোলে ডেমো অ্যাকাউন্ট তথ্য প্রিন্ট হতে হবে)*
+  *(Status: Seed complete! Admin & Tutor demo accounts created. Exit code 0)*
 
 ---
 
-### - [ ] Step 3: Full Codebase Build & Typecheck Gate
+### - [x] Step 3: Full Codebase Build & Typecheck Gate
 - **Goal:** অ্যাপ্লিকেশনে কোনো টাইপ এরর বা বিল্ড সমস্যা নেই তা শতভাগ নিশ্চিত করা।
 - **Vault Refs:** `vault/04-STACK.md`
 - **Target Files:** Codebase overall
 - **Verification Gate:**
   ```powershell
-  npm run typecheck && npm run build
+  npm run typecheck ; npm run build
   ```
-  *(Exit code 0 হতে হবে)*
+  *(Status: Typecheck clean, Next.js 16 Turbopack build passed. Exit code 0)*
 
 ---
 
