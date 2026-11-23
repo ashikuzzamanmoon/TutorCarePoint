@@ -24,7 +24,7 @@ export function SiteFooter() {
         <div>
           <p className="text-lg font-bold text-stone-900">{SITE_NAME_BN}</p>
           <p className="mt-2 text-sm leading-relaxed text-stone-500">
-            সিরাজগঞ্জ জেলার টিউটর ও অভিভাবকদের জন্য সম্পূর্ণ ফ্রি টিউশন
+            সারা বাংলাদেশের টিউটর ও অভিভাবকদের জন্য সম্পূর্ণ ফ্রি টিউশন
             মিডিয়া। আমরা টিউটর আর অভিভাবককে যোগাযোগ করিয়ে দিই — কোনো
             কমিশন নেই, কোনো ফি নেই, কখনোই না।
           </p>
@@ -62,7 +62,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-stone-100">
         <p className="mx-auto max-w-6xl px-4 py-4 text-center text-xs text-stone-400">
-          © {new Date().getFullYear()} {SITE_NAME_BN} — সিরাজগঞ্জের জন্য, সম্পূর্ণ ফ্রি।
+          © {new Date().getFullYear()} {SITE_NAME_BN} — সম্পূর্ণ ফ্রি ও বিশ্বস্ত টিউশন প্ল্যাটফর্ম। সর্বস্বত্ব সংরক্ষিত।
         </p>
       </div>
     </footer>
