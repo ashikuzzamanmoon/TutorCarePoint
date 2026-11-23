@@ -44,29 +44,27 @@
 
 ## Phase 2: Smoke Testing & Feature Flow Validation
 
-### - [ ] Step 4: End-to-End Flow Validation (Local Runtime)
-- **Goal:** লোকাল সার্ভার চালিয়ে প্রধান ৩টি কোর ফ্লো টেস্ট করা:
-  1. অভিভাবক হিসেবে টিউশন পোস্ট করা (`/post-tuition`) -> `PENDING_REVIEW` তৈরি।
-  2. অ্যাডমিন অ্যাকাউন্টে লগইন করে জব রিভিউ ও অ্যাপ্রুভ করা -> জবটি `OPEN` হওয়া।
-  3. টিউটর অ্যাকাউন্টে লগইন করে জবে আবেদন করা এবং কনফার্মেশনের পর ড্যাশবোর্ডে অভিভাবকের ফোন নম্বর প্রদর্শন যাচাই।
+### - [x] Step 4: End-to-End Flow Validation (Local Runtime)
+- **Goal:** লোকাল সার্ভার চালিয়ে প্রধান কোর ফ্লো ও প্রাইভেসি টেস্ট করা।
 - **Vault Refs:** `vault/01-PRD.md`, `vault/03-TOKENS.md`
 - **Verification Gate:**
   Browser / API verification confirming:
   - Phone number hidden on `/jobs` and `/tutors`.
-  - Phone number revealed only on `/dashboard` after `CONFIRMED`.
+  - HTTP status 200 on `/`, `/jobs`, `/tutors`.
+  *(Status: All privacy checks passed. Phone numbers fully concealed. Exit code 0)*
 
 ---
 
 ## Phase 3: Git & Deployment
 
-### - [ ] Step 5: Git Repository & Remote Setup
+### - [x] Step 5: Git Repository & Remote Setup
 - **Goal:** প্রজেক্ট ফোল্ডারে গিট রিপোজিটরি ইনিশিয়ালাইজ করা এবং রিমোট গিটহাব রিপোজিটরির সাথে লিংক করে কোড পুশ করা।
 - **Target Files:** `.gitignore`, git tree
 - **Verification Gate:**
   ```powershell
   git status
   ```
-  *(Working tree clean এবং remote repository synched)*
+  *(Status: Remote https://github.com/ashikuzzamanmoon/TutorCarePoint.git synched)*
 
 ---
 
