@@ -10,7 +10,7 @@ export const metadata = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ registered?: string }>;
+  searchParams: Promise<{ registered?: string; reset?: string }>;
 }) {
   const params = await searchParams;
 
@@ -24,6 +24,11 @@ export default async function LoginPage({
         {params.registered === "1" ? (
           <p className="mt-4 rounded-lg bg-emerald-50 px-3 py-2.5 text-sm font-semibold text-emerald-800">
             অ্যাকাউন্ট তৈরি হয়েছে! এখন লগ ইন করুন।
+          </p>
+        ) : null}
+        {params.reset === "1" ? (
+          <p className="mt-4 rounded-lg bg-emerald-50 px-3 py-2.5 text-sm font-semibold text-emerald-800">
+            আপনার পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে! নতুন পাসওয়ার্ড দিয়ে লগ ইন করুন।
           </p>
         ) : null}
         <div className="mt-5">

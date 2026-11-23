@@ -9,6 +9,7 @@ import {
 import { SubmitButton } from "@/components/submit-button";
 import { checkboxClass, inputClass, labelClass } from "@/components/ui";
 import { GENDERS, GENDER_LABELS, DISTRICTS } from "@/lib/site";
+import Link from "next/link";
 import { useActionState, useState } from "react";
 
 const initialState: ActionResult = { ok: false };
@@ -170,6 +171,14 @@ export function LoginForm() {
           label="পাসওয়ার্ড"
           autoComplete="current-password"
         />
+        <div className="flex justify-end">
+          <Link
+            href="/forgot-password"
+            className="cursor-pointer text-xs font-semibold text-emerald-700 hover:underline"
+          >
+            পাসওয়ার্ড ভুলে গেছেন?
+          </Link>
+        </div>
         <FormError state={state} />
         <SubmitButton className="w-full">লগ ইন</SubmitButton>
       </form>
