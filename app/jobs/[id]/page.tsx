@@ -1,6 +1,7 @@
 import { ApplyForm } from "@/components/apply-form";
 import { Badge, Card, JobStatusBadge } from "@/components/ui";
 import { getCurrentUser } from "@/lib/auth-helpers";
+import { getCachedJobById } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import {
   GENDER_LABELS,
@@ -19,10 +20,11 @@ export default async function JobDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const job = await prisma.job.findUnique({ where: { id } });
+  const [job, user] = await Promise.all([
+    getCachedJobById(id),
+    getCurrentUser(),
+  ]);
   if (!job) notFound();
-
-  const user = await getCurrentUser();
   const isAdmin = user?.role === "ADMIN";
   const expired = job.status === "OPEN" && isJobExpired(job.publishedAt);
   const canApply = job.status === "OPEN" && !expired;

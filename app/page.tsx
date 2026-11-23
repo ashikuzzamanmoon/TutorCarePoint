@@ -1,6 +1,6 @@
 import { JobCard } from "@/components/job-card";
 import { Badge, EmptyState, SectionTitle } from "@/components/ui";
-import { prisma } from "@/lib/prisma";
+import { getCachedRecentJobs } from "@/lib/data";
 import {
   CLASSES,
   DISTRICTS,
@@ -9,7 +9,6 @@ import {
   SITE_NAME_BN,
   districtName,
 } from "@/lib/site";
-import { expiryCutoff } from "@/lib/utils";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -58,11 +57,7 @@ const STEPS = [
 ];
 
 export default async function HomePage() {
-  const recentJobs = await prisma.job.findMany({
-    where: { status: "OPEN", publishedAt: { gte: expiryCutoff() } },
-    orderBy: { publishedAt: "desc" },
-    take: 12,
-  });
+  const recentJobs = await getCachedRecentJobs();
 
   const featuredFirst = [
     ...recentJobs.filter((j) => j.district === FEATURED_DISTRICT),
@@ -150,6 +145,7 @@ export default async function HomePage() {
           <div className="mt-6 flex flex-wrap items-center gap-4">
             <Link
               href="/post-tuition"
+              prefetch={true}
               className="cursor-pointer inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-bold text-emerald-900 shadow-md transition hover:bg-emerald-50 active:scale-98"
             >
               <span>টিউশন পোস্ট করুন (ফ্রি)</span>
@@ -157,6 +153,7 @@ export default async function HomePage() {
             </Link>
             <Link
               href="/register"
+              prefetch={true}
               className="cursor-pointer inline-flex items-center gap-2 rounded-xl border border-emerald-400/40 bg-emerald-800/40 px-6 py-3 font-bold text-white backdrop-blur-xs transition hover:bg-emerald-700/60 active:scale-98"
             >
               <span>টিউটর হিসেবে যোগ দিন</span>
@@ -224,6 +221,7 @@ export default async function HomePage() {
         <div className="mt-8 text-center">
           <Link
             href="/how-it-works"
+            prefetch={true}
             className="cursor-pointer inline-flex items-center gap-1.5 text-sm font-bold text-emerald-700 transition hover:gap-2.5 hover:text-emerald-800"
           >
             <span>সম্পূর্ণ মধ্যস্থতা প্রক্রিয়া বিস্তারিত দেখুন</span>
@@ -261,7 +259,7 @@ export default async function HomePage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-red-500 font-bold">✕</span>
-                  <span>রেজিস্ট্রেশন বা তথাকথিত "ভেরিফিকেশন ফি"-এর নামে ৫০০ থেকে ১,০০০ টাকা দিতে হয়।</span>
+                  <span>রেজিস্ট্রেশন বা তথাকথিত &quot;ভেরিফিকেশন ফি&quot;-এর নামে ৫০০ থেকে ১,০০০ টাকা দিতে হয়।</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-red-500 font-bold">✕</span>
@@ -313,6 +311,7 @@ export default async function HomePage() {
           </div>
           <Link
             href="/jobs"
+            prefetch={true}
             className="cursor-pointer text-sm font-bold text-emerald-700 hover:text-emerald-800 hover:underline"
           >
             সব টিউশন দেখুন ({recentJobs.length.toLocaleString("bn-BD")}) →
@@ -326,6 +325,7 @@ export default async function HomePage() {
             action={
               <Link
                 href="/post-tuition"
+                prefetch={true}
                 className="cursor-pointer inline-block rounded-xl bg-emerald-600 px-6 py-3 font-bold text-white transition hover:bg-emerald-700"
               >
                 টিউশন পোস্ট করুন (ফ্রি)
@@ -346,6 +346,7 @@ export default async function HomePage() {
           <div className="mt-8 text-center">
             <Link
               href="/jobs"
+              prefetch={true}
               className="cursor-pointer inline-flex items-center gap-2 rounded-xl border-2 border-emerald-600 bg-white px-6 py-3 font-bold text-emerald-700 shadow-xs transition hover:bg-emerald-50 active:scale-98"
             >
               <span>সকল টিউশন ফিল্টার করে দেখুন</span>
@@ -366,6 +367,7 @@ export default async function HomePage() {
           {/* Featured District Highlight */}
           <Link
             href={`/jobs?district=${FEATURED_DISTRICT}`}
+            prefetch={true}
             className="group mb-6 block rounded-2xl border-2 border-emerald-500 bg-gradient-to-r from-emerald-50 via-teal-50/50 to-white p-5 shadow-xs transition hover:border-emerald-600 hover:shadow-md"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -392,6 +394,7 @@ export default async function HomePage() {
               <Link
                 key={d.key}
                 href={`/jobs?district=${d.key}`}
+                prefetch={true}
                 className="cursor-pointer rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2 text-sm font-semibold text-stone-700 transition hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-800"
               >
                 {d.bn}
@@ -414,6 +417,7 @@ export default async function HomePage() {
             <div className="mt-6">
               <Link
                 href="/post-tuition"
+                prefetch={true}
                 className="cursor-pointer inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700"
               >
                 <span>টিউশন পোস্ট করুন</span>
@@ -432,6 +436,7 @@ export default async function HomePage() {
             <div className="mt-6">
               <Link
                 href="/register"
+                prefetch={true}
                 className="cursor-pointer inline-flex items-center gap-2 rounded-xl bg-stone-900 px-5 py-2.5 font-bold text-white shadow-md transition hover:bg-stone-800"
               >
                 <span>রেজিস্টার করুন (ফ্রি)</span>

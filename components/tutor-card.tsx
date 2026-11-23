@@ -8,7 +8,7 @@ import Link from "next/link";
 // through the mediated flow after confirmation.
 export function TutorCard({ tutor }: { tutor: TutorProfile }) {
   return (
-    <Link href={`/tutors/${tutor.id}`} className="block">
+    <Link href={`/tutors/${tutor.id}`} prefetch={true} className="block">
       <Card className="h-full p-5 transition hover:border-emerald-300 hover:shadow">
         <div className="flex items-start gap-3">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xl font-bold text-emerald-800">

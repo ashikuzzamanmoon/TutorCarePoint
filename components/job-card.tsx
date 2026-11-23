@@ -15,7 +15,7 @@ export function JobCard({ job }: { job: Job }) {
   const posted = job.publishedAt ?? job.createdAt;
 
   return (
-    <Link href={`/jobs/${job.id}`} className="block">
+    <Link href={`/jobs/${job.id}`} prefetch={true} className="block">
       <Card className="h-full p-5 transition hover:border-emerald-300 hover:shadow">
         <div className="flex items-start justify-between gap-3">
           <h3 className="text-base font-bold leading-snug text-stone-900">

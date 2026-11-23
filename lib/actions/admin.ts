@@ -4,10 +4,12 @@ import { requireAdmin } from "@/lib/auth-helpers";
 import { prisma } from "@/lib/prisma";
 import type { ApplicationStatus, JobStatus } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import type { ActionResult } from "./auth";
 
 function revalidateAdmin() {
+  updateTag("jobs");
+  updateTag("tutors");
   revalidatePath("/admin");
   revalidatePath("/admin/jobs");
   revalidatePath("/admin/tutors");

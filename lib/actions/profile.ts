@@ -4,7 +4,7 @@ import { requireUser } from "@/lib/auth-helpers";
 import { prisma } from "@/lib/prisma";
 import { CLASSES, SUBJECTS, DISTRICT_KEYS } from "@/lib/site";
 import { normalizePhone } from "@/lib/utils";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { z } from "zod";
 import type { ActionResult } from "./auth";
 
@@ -89,7 +89,7 @@ export async function updateProfile(
     };
   }
 
-  await prisma.tutorProfile.upsert({
+  const profile = await prisma.tutorProfile.upsert({
     where: { userId: user.id },
     update: {
       displayName: data.displayName,
@@ -126,6 +126,8 @@ export async function updateProfile(
     },
   });
 
+  updateTag("tutors");
+  updateTag(`tutor-${profile.id}`);
   revalidatePath("/dashboard");
   revalidatePath("/tutors");
   return { ok: true };

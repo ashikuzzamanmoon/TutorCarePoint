@@ -1,5 +1,5 @@
 import { Badge, Card } from "@/components/ui";
-import { prisma } from "@/lib/prisma";
+import { getCachedTutorById } from "@/lib/data";
 import {
   GENDER_LABELS,
   MEDIUM_LABELS,
@@ -18,7 +18,7 @@ export default async function TutorDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const tutor = await prisma.tutorProfile.findUnique({ where: { id } });
+  const tutor = await getCachedTutorById(id);
   if (!tutor || !tutor.isPublished) notFound();
 
   const location = tutor.area

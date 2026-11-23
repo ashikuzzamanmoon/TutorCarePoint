@@ -1,10 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // NOTE: `cacheComponents` is intentionally NOT enabled. It forbids the
-  // `export const dynamic = "force-dynamic"` route config this app uses on
-  // every database-backed page to avoid build-time prerendering against
-  // the database. The classic segment-config model is used instead.
+  compress: true,
+  poweredByHeader: false,
   turbopack: {
     rules: {
       "*.css": {

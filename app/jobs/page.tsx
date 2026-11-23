@@ -1,6 +1,7 @@
 import { JobCard } from "@/components/job-card";
 import { JobFilters } from "@/components/job-filters";
 import { EmptyState, SectionTitle } from "@/components/ui";
+import { getCachedOpenJobs } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import {
   DISTRICT_KEYS,
@@ -64,11 +65,23 @@ export default async function JobsPage({
     ];
   }
 
-  const jobs = await prisma.job.findMany({
-    where,
-    orderBy: { publishedAt: "desc" },
-    take: 100,
-  });
+  const hasFilters = Boolean(
+    params.district ||
+    params.className ||
+    params.subject ||
+    params.medium ||
+    params.gender ||
+    params.salaryMin ||
+    params.salaryMax
+  );
+
+  const jobs = hasFilters
+    ? await prisma.job.findMany({
+        where,
+        orderBy: { publishedAt: "desc" },
+        take: 100,
+      })
+    : await getCachedOpenJobs();
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">

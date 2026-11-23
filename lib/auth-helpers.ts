@@ -1,16 +1,17 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 
-/** The signed-in user with their tutor profile (if any), or null. */
-export async function getCurrentUser() {
+/** The signed-in user with their tutor profile (if any), or null. Deduplicated per request with React cache(). */
+export const getCurrentUser = cache(async () => {
   const session = await auth();
   if (!session?.user?.id) return null;
   return prisma.user.findUnique({
     where: { id: session.user.id },
     include: { tutorProfile: true },
   });
-}
+});
 
 /** Require any signed-in user; redirects to /login otherwise. */
 export async function requireUser() {

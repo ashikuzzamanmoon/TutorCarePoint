@@ -18,7 +18,7 @@ export async function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" prefetch={true} className="flex items-center gap-2">
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-600 text-lg font-bold text-white">
             টি
           </span>
@@ -37,6 +37,7 @@ export async function SiteHeader() {
             <>
               <Link
                 href={isAdmin ? "/admin" : "/dashboard"}
+                prefetch={true}
                 className="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white hover:bg-emerald-700"
               >
                 {isAdmin ? "অ্যাডমিন" : "ড্যাশবোর্ড"}
@@ -54,12 +55,14 @@ export async function SiteHeader() {
             <>
               <Link
                 href="/login"
+                prefetch={true}
                 className="cursor-pointer rounded-lg border border-stone-300 px-3 py-2 text-sm font-bold text-stone-700 hover:bg-stone-50"
               >
                 লগ ইন
               </Link>
               <Link
                 href="/register"
+                prefetch={true}
                 className="cursor-pointer rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white hover:bg-emerald-700"
               >
                 টিউটর রেজিস্টার
@@ -75,6 +78,7 @@ export async function SiteHeader() {
             <Link
               key={link.href}
               href={link.href}
+              prefetch={true}
               className="whitespace-nowrap px-3 py-2.5 text-sm font-semibold text-stone-600 hover:text-emerald-700"
             >
               {link.label}

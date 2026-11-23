@@ -1,6 +1,7 @@
 import { TutorCard } from "@/components/tutor-card";
 import { TutorFilters } from "@/components/tutor-filters";
 import { EmptyState, SectionTitle } from "@/components/ui";
+import { getCachedDefaultTutors } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import { DISTRICT_KEYS } from "@/lib/site";
 import type { Prisma } from "@prisma/client";
@@ -34,11 +35,20 @@ export default async function TutorsPage({
   if (params.subject) where.subjects = { has: params.subject };
   if (params.verified === "1") where.isVerified = true;
 
-  const tutors = await prisma.tutorProfile.findMany({
-    where,
-    orderBy: [{ isVerified: "desc" }, { createdAt: "desc" }],
-    take: 100,
-  });
+  const hasFilters = Boolean(
+    params.district ||
+    params.className ||
+    params.subject ||
+    params.verified
+  );
+
+  const tutors = hasFilters
+    ? await prisma.tutorProfile.findMany({
+        where,
+        orderBy: [{ isVerified: "desc" }, { createdAt: "desc" }],
+        take: 100,
+      })
+    : await getCachedDefaultTutors();
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">

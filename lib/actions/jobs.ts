@@ -9,7 +9,7 @@ import {
   districtName,
 } from "@/lib/site";
 import { expiryCutoff, normalizePhone } from "@/lib/utils";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { z } from "zod";
 import type { ActionResult } from "./auth";
 
@@ -89,6 +89,7 @@ export async function submitJob(
     },
   });
 
+  updateTag("jobs");
   return { ok: true };
 }
 
@@ -120,6 +121,8 @@ export async function applyToJob(
     data: { jobId, tutorId: profile.id, note },
   });
 
+  updateTag("jobs");
+  updateTag(`job-${jobId}`);
   revalidatePath(`/jobs/${jobId}`);
   revalidatePath("/dashboard");
   return { ok: true };
