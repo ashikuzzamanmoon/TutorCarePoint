@@ -3,6 +3,7 @@
 import { requireAdmin } from "@/lib/auth-helpers";
 import { prisma } from "@/lib/prisma";
 import type { ApplicationStatus, JobStatus } from "@prisma/client";
+import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import type { ActionResult } from "./auth";
 
@@ -129,6 +130,24 @@ export async function setApplicationStatus(
         data: { status: "FILLED" },
       });
     }
+  });
+  revalidateAdmin();
+  return { ok: true };
+}
+
+/** Reset a user's password (by admin). */
+export async function resetUserPassword(
+  userId: string,
+  newPassword: string,
+): Promise<ActionResult> {
+  await requireAdmin();
+  if (!newPassword || newPassword.length < 6) {
+    return { ok: false, error: "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।" };
+  }
+  const passwordHash = await bcrypt.hash(newPassword, 12);
+  await prisma.user.update({
+    where: { id: userId },
+    data: { passwordHash },
   });
   revalidateAdmin();
   return { ok: true };

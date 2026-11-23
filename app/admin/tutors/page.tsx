@@ -2,6 +2,7 @@ import {
   TutorPublishToggle,
   TutorVerifyToggle,
 } from "@/components/admin-actions";
+import { AdminResetPasswordModal } from "@/components/admin-reset-password";
 import { Badge, EmptyState, SectionTitle } from "@/components/ui";
 import { prisma } from "@/lib/prisma";
 import { districtName } from "@/lib/site";
@@ -14,7 +15,7 @@ export default async function AdminTutorsPage() {
   const tutors = await prisma.tutorProfile.findMany({
     orderBy: { createdAt: "desc" },
     include: {
-      user: { select: { email: true } },
+      user: { select: { id: true, email: true } },
       _count: { select: { applications: true } },
     },
     take: 100,
@@ -79,7 +80,7 @@ export default async function AdminTutorsPage() {
                   ) : null}
                 </div>
               </div>
-              <div className="mt-4 flex flex-wrap gap-2 border-t border-stone-100 pt-4">
+              <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-stone-100 pt-4">
                 <TutorVerifyToggle
                   tutorId={tutor.id}
                   isVerified={tutor.isVerified}
@@ -87,6 +88,11 @@ export default async function AdminTutorsPage() {
                 <TutorPublishToggle
                   tutorId={tutor.id}
                   isPublished={tutor.isPublished}
+                />
+                <AdminResetPasswordModal
+                  userId={tutor.user.id}
+                  userEmail={tutor.user.email}
+                  userName={tutor.displayName}
                 />
               </div>
             </div>
