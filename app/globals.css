@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/*
+ * TutorCarePoint — clean, light, mobile-first design for cheap Android
+ * phones. Bengali-first typography (Noto Sans Bengali), emerald primary.
+ * No heavy imagery; pages stay fast on slow connections.
+ */
+
+@theme inline {
+  --font-sans: var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-stone-50 font-sans text-stone-900 antialiased;
+  }
+
+  ::selection {
+    background: rgba(5, 150, 105, 0.25);
+  }
+}
