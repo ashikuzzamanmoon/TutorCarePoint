@@ -9,8 +9,9 @@ import {
 import { SubmitButton } from "@/components/submit-button";
 import { checkboxClass, inputClass, labelClass } from "@/components/ui";
 import { GENDERS, GENDER_LABELS, DISTRICTS } from "@/lib/site";
+import { showErrorAlert, showWarningAlert } from "@/lib/alerts";
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 const initialState: ActionResult = { ok: false };
 
@@ -140,6 +141,13 @@ export function GoogleSignInButton({
 
 export function LoginForm() {
   const [state, action] = useActionState(loginTutor, initialState);
+
+  useEffect(() => {
+    if (state.error) {
+      showErrorAlert(state.error);
+    }
+  }, [state.error]);
+
   return (
     <div className="space-y-5">
       <GoogleSignInButton text="Google দিয়ে লগ ইন করুন" />
@@ -188,6 +196,17 @@ export function LoginForm() {
 
 export function RegisterForm() {
   const [state, action] = useActionState(registerTutor, initialState);
+
+  useEffect(() => {
+    if (state.error) {
+      if (state.error.includes("ইতিমধ্যে") || state.error.includes("লগ ইন")) {
+        showWarningAlert(state.error, "/login", "লগ ইন করুন");
+      } else {
+        showErrorAlert(state.error);
+      }
+    }
+  }, [state.error]);
+
   return (
     <div className="space-y-5">
       <GoogleSignInButton text="Google দিয়ে সরাসরি রেজিস্টার করুন" />

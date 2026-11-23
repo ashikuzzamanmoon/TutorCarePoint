@@ -14,13 +14,25 @@ import {
   SUBJECTS,
   DISTRICTS,
 } from "@/lib/site";
+import { showErrorAlert, showSuccessAlert } from "@/lib/alerts";
 import type { TutorProfile } from "@prisma/client";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 
 const initialState: ActionResult = { ok: false };
 
 export function ProfileForm({ profile }: { profile: TutorProfile | null }) {
   const [state, action] = useActionState(updateProfile, initialState);
+
+  useEffect(() => {
+    if (state.error) {
+      showErrorAlert(state.error);
+    } else if (state.ok) {
+      showSuccessAlert(
+        "সংরক্ষিত হয়েছে!",
+        "আপনার প্রোফাইল সফলভাবে আপডেট করা হয়েছে।",
+      );
+    }
+  }, [state.error, state.ok]);
 
   return (
     <form action={action} className="space-y-5">
