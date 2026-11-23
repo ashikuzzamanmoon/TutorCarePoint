@@ -52,7 +52,7 @@ function PasswordInput({
         <button
           type="button"
           onClick={() => setShowPassword((prev) => !prev)}
-          className="absolute inset-y-0 right-0 flex items-center pr-3 text-stone-400 transition hover:text-stone-600 focus:outline-none"
+          className="cursor-pointer absolute inset-y-0 right-0 flex items-center pr-3 text-stone-400 transition hover:text-stone-600 focus:outline-none"
           aria-label={showPassword ? "পাসওয়ার্ড লুকান" : "পাসওয়ার্ড দেখুন"}
         >
           {showPassword ? (

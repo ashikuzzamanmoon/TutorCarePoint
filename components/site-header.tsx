@@ -54,13 +54,13 @@ export async function SiteHeader() {
             <>
               <Link
                 href="/login"
-                className="rounded-lg border border-stone-300 px-3 py-2 text-sm font-bold text-stone-700 hover:bg-stone-50"
+                className="cursor-pointer rounded-lg border border-stone-300 px-3 py-2 text-sm font-bold text-stone-700 hover:bg-stone-50"
               >
                 লগ ইন
               </Link>
               <Link
                 href="/register"
-                className="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white hover:bg-emerald-700"
+                className="cursor-pointer rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white hover:bg-emerald-700"
               >
                 টিউটর রেজিস্টার
               </Link>
