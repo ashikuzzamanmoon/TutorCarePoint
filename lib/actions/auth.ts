@@ -115,3 +115,8 @@ export async function loginTutor(
 export async function signOutAction() {
   await signOut({ redirectTo: "/" });
 }
+
+/** Sign in with Google OAuth. */
+export async function loginWithGoogle() {
+  await signIn("google", { redirectTo: "/dashboard" });
+}
