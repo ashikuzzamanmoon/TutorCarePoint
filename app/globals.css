@@ -19,6 +19,20 @@
     @apply bg-stone-50 font-sans text-stone-900 antialiased;
   }
 
+  button,
+  [type="button"],
+  [type="reset"],
+  [type="submit"] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [type="button"]:disabled,
+  [type="reset"]:disabled,
+  [type="submit"]:disabled {
+    cursor: not-allowed;
+  }
+
   ::selection {
     background: rgba(5, 150, 105, 0.25);
   }
