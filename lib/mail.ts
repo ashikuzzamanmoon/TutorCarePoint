@@ -1,5 +1,21 @@
+import nodemailer from "nodemailer";
 import { Resend } from "resend";
 import { SITE_NAME_BN } from "@/lib/site";
+
+// Gmail SMTP configuration
+const smtpUser = process.env.SMTP_USER || process.env.GMAIL_USER;
+const smtpPass = process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD;
+
+const transporter =
+  smtpUser && smtpPass
+    ? nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: smtpUser,
+          pass: smtpPass,
+        },
+      })
+    : null;
 
 const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
@@ -9,8 +25,8 @@ export async function sendPasswordResetEmail(
   email: string,
   resetLink: string,
 ): Promise<{ ok: boolean; error?: string }> {
-  const from =
-    process.env.EMAIL_FROM || "TutorCarePoint <onboarding@resend.dev>";
+  const fromName = SITE_NAME_BN;
+  const fromAddress = smtpUser || process.env.EMAIL_FROM || "onboarding@resend.dev";
   const subject = `পাসওয়ার্ড রিসেট লিংক — ${SITE_NAME_BN}`;
 
   const html = `
@@ -35,29 +51,50 @@ export async function sendPasswordResetEmail(
     </div>
   `;
 
-  if (!resend) {
-    console.log("\n========================================================");
-    console.log(`[LOCAL DEV PASSWORD RESET LINK]`);
-    console.log(`To: ${email}`);
-    console.log(`Reset Link: ${resetLink}`);
-    console.log("========================================================\n");
-    return { ok: true };
+  // 1. Send via Gmail SMTP if configured
+  if (transporter) {
+    try {
+      await transporter.sendMail({
+        from: `"${fromName}" <${fromAddress}>`,
+        to: email,
+        subject,
+        html,
+      });
+      return { ok: true };
+    } catch (err: unknown) {
+      console.error("Gmail SMTP error:", err);
+      return {
+        ok: false,
+        error: "জিমেইল সার্ভার থেকে ইমেইল পাঠানো সম্ভব হয়নি।",
+      };
+    }
   }
 
-  try {
-    const { error } = await resend.emails.send({
-      from,
-      to: email,
-      subject,
-      html,
-    });
-    if (error) {
-      console.error("Resend email error:", error);
-      return { ok: false, error: error.message };
+  // 2. Send via Resend if configured
+  if (resend) {
+    try {
+      const { error } = await resend.emails.send({
+        from: `TutorCarePoint <${process.env.EMAIL_FROM || "onboarding@resend.dev"}>`,
+        to: email,
+        subject,
+        html,
+      });
+      if (error) {
+        console.error("Resend error:", error);
+        return { ok: false, error: error.message };
+      }
+      return { ok: true };
+    } catch (err: unknown) {
+      console.error("Resend error:", err);
+      return { ok: false, error: "ইমেইল পাঠানো সম্ভব হয়নি।" };
     }
-    return { ok: true };
-  } catch (err: unknown) {
-    console.error("Failed to send email:", err);
-    return { ok: false, error: "ইমেইল পাঠানো সম্ভব হয়নি।" };
   }
+
+  // 3. Fallback for Local Dev Simulation
+  console.log("\n========================================================");
+  console.log(`[LOCAL DEV PASSWORD RESET LINK]`);
+  console.log(`To: ${email}`);
+  console.log(`Reset Link: ${resetLink}`);
+  console.log("========================================================\n");
+  return { ok: true };
 }
