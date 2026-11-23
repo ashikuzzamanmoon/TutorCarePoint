@@ -6,13 +6,48 @@ import { prisma } from "@/lib/prisma";
 import {
   GENDER_LABELS,
   MEDIUM_LABELS,
+  SITE_NAME_BN,
+  SITE_URL,
   districtName,
 } from "@/lib/site";
 import { formatDate, formatSalary, isJobExpired, timeAgo } from "@/lib/utils";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const job = await getCachedJobById(id);
+  if (!job) {
+    return { title: "টিউশন পাওয়া যায়নি" };
+  }
+  const districtBn = districtName(job.district);
+  const title = `${job.title} — ${districtBn}`;
+  const description = `${job.className} এর জন্য ${job.subjects.join(", ")} বিষয় পড়ানোর গৃহশিক্ষক আবশ্যক। এলাকা: ${job.area ? `${job.area}, ` : ""}${districtBn}। বেতন: ${job.salary ? `${job.salary} টাকা` : "আলোচনা সাপেক্ষে"}।`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/jobs/${id}` },
+    openGraph: {
+      title,
+      description,
+      url: `/jobs/${id}`,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 export default async function JobDetailPage({
   params,
@@ -44,8 +79,50 @@ export default async function JobDetailPage({
     : districtName(job.district);
   const posted = job.publishedAt ?? job.createdAt;
 
+  const jobPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: job.title,
+    description: `${job.className} এর জন্য ${job.subjects.join(", ")} বিষয় পড়ানোর গৃহশিক্ষক প্রয়োজন।`,
+    datePosted: posted.toISOString(),
+    validThrough: new Date(posted.getTime() + 30 * 86400000).toISOString(),
+    employmentType: "PART_TIME",
+    hiringOrganization: {
+      "@type": "Organization",
+      name: SITE_NAME_BN,
+      sameAs: SITE_URL,
+      logo: `${SITE_URL}/icon.svg`,
+    },
+    jobLocation: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: job.area || districtName(job.district),
+        addressRegion: districtName(job.district),
+        addressCountry: "BD",
+      },
+    },
+    ...(job.salary
+      ? {
+          baseSalary: {
+            "@type": "MonetaryAmount",
+            currency: "BDT",
+            value: {
+              "@type": "QuantitativeValue",
+              value: job.salary,
+              unitText: "MONTH",
+            },
+          },
+        }
+      : {}),
+  };
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jobPostingJsonLd) }}
+      />
       <Link
         href="/jobs"
         className="text-sm font-bold text-emerald-700 hover:underline"

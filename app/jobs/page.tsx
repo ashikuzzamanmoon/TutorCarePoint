@@ -10,9 +10,17 @@ import {
 } from "@/lib/site";
 import { expiryCutoff } from "@/lib/utils";
 import type { Gender, Medium, Prisma } from "@prisma/client";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "টিউশন খুঁজুন — সারা বাংলাদেশের সাম্প্রতিক টিউশন পোস্ট",
+  description:
+    "সিরাজগঞ্জসহ সারা বাংলাদেশের বিভিন্ন শ্রেণি ও বিষয়ের টিউশন পোস্ট দেখুন এবং বিনামূল্যে আবেদন করুন। ০% কমিশন, কোনো হিডেন চার্জ নেই।",
+  alternates: { canonical: "/jobs" },
+};
 
 interface SearchParams {
   district?: string;

@@ -5,9 +5,17 @@ import { getCachedDefaultTutors } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import { DISTRICT_KEYS } from "@/lib/site";
 import type { Prisma } from "@prisma/client";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "দক্ষ ও অভিজ্ঞ টিউটর খুঁজুন",
+  description:
+    "আপনার সন্তানের জন্য সিরাজগঞ্জ ও সারা বাংলাদেশের বিভিন্ন স্বনামধন্য বিশ্ববিদ্যালয় ও কলেজের সেরা টিউটরদের প্রোফাইল দেখুন ও সরাসরি যুক্ত হন।",
+  alternates: { canonical: "/tutors" },
+};
 
 interface SearchParams {
   district?: string;

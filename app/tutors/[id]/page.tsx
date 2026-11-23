@@ -3,13 +3,48 @@ import { getCachedTutorById } from "@/lib/data";
 import {
   GENDER_LABELS,
   MEDIUM_LABELS,
+  SITE_NAME_BN,
+  SITE_URL,
   districtName,
 } from "@/lib/site";
 import { formatSalary, initials } from "@/lib/utils";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const tutor = await getCachedTutorById(id);
+  if (!tutor || !tutor.isPublished) {
+    return { title: "টিউটর পাওয়া যায়নি" };
+  }
+  const districtBn = districtName(tutor.district);
+  const title = `${tutor.displayName} — টিউটর প্রোফাইল (${districtBn})`;
+  const description = `${tutor.educationLevel}${tutor.institution ? `, ${tutor.institution}` : ""}। বিষয়: ${tutor.subjects.join(", ")}। এলাকা: ${tutor.area ? `${tutor.area}, ` : ""}${districtBn}। ${SITE_NAME_BN}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/tutors/${id}` },
+    openGraph: {
+      title,
+      description,
+      url: `/tutors/${id}`,
+      type: "profile",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 // Public tutor profile — never shows the phone number.
 export default async function TutorDetailPage({
@@ -25,8 +60,30 @@ export default async function TutorDetailPage({
     ? `${tutor.area}, ${districtName(tutor.district)}`
     : districtName(tutor.district);
 
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: tutor.displayName,
+    jobTitle: "Home Tutor",
+    description: `${tutor.educationLevel} — ${tutor.subjects.join(", ")} বিষয় পড়ান।`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: tutor.area || districtName(tutor.district),
+      addressRegion: districtName(tutor.district),
+      addressCountry: "BD",
+    },
+    alumniOf: tutor.institution ? {
+      "@type": "EducationalOrganization",
+      name: tutor.institution,
+    } : undefined,
+  };
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
       <Link
         href="/tutors"
         className="text-sm font-bold text-emerald-700 hover:underline"
