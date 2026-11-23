@@ -1,45 +1,69 @@
-# 01. Product Requirements Document (PRD)
+# 01. Product Requirements Document (PRD) — TutorCarePoint
 
 ## 1. Executive Summary
-- **Project Name:** [e.g. My Saas Platform / AI Video Pipeline]
-- **One-Line Pitch:** [A clear, concise summary of what this software does]
-- **Target Audience:** [Who will use this? e.g. Content creators, developers, internal team]
+- **Project Name:** TutorCarePoint (টিউটর কেয়ার পয়েন্ট)
+- **One-Line Pitch:** সারা বাংলাদেশের টিউটর ও অভিভাবকদের জন্য সম্পূর্ণ ফ্রি, মধ্যস্থতাভিত্তিক (mediated) টিউশন প্ল্যাটফর্ম।
+- **Target Audience:** টিউশন খুঁজছেন এমন টিউটর এবং গৃহশিক্ষক খুঁজছেন এমন অভিভাবক (প্রাথমিক ফোকাস: সিরাজগঞ্জ জেলা, জাতীয় বিস্তার: ৬৪ জেলা)।
+- **The Core Differentiator (100% FREE):** কোনো কমিশন নেই (CareTutors ৫০–৬০% কমিশন নেয়, এখানে ০%), কোনো রেজিস্ট্রেশন বা ভেরিফিকেশন ফি নেই, কোনো ডিপোজিট নেই। কোনো পেমেন্ট গেটওয়ে কোডবেসে থাকবে না।
 
 ---
 
 ## 2. Problem Statement & Value Proposition
-- **Current Friction:** [What pain point or inefficiency does this solve?]
-- **Proposed Solution:** [How does this project solve it cleanly?]
-- **Success Criteria:** [Quantifiable outcome, e.g. "Renders a 60s video in <30 seconds", "API responds in <100ms"]
+- **Current Friction:** বাংলাদেশে প্রচলিত টিউশন মিডিয়াগুলো টিউটরের প্রথম মাসের বেতনের ৫০-৬০% কমিশন এবং উচ্চ ভেরিফিকেশন ফি কেটে নেয়। অনেক ক্ষেত্রে অভিভাবকরাও হয়রানির শিকার হন।
+- **Proposed Solution:** সম্পূর্ণ ফ্রি সেবা। অভিভাবক কোনো লগইন ছাড়াই টিউশন পোস্ট করতে পারেন। অ্যাডমিন নিজে ফোনে ভেরিফাই করে জব ওপেন করেন, আবেদনকারী টিউটরদের মধ্য থেকে শর্টলিস্ট ও ডেমো ক্লাসের মাধ্যমে নিশ্চিত করার পর টিউটরকে অভিভাবকের ফোন নম্বর দেওয়া হয়।
+- **Success Criteria:** অভিভাবকের পোস্ট সহজে পাবলিশ হওয়া, টিউটরদের আবেদন প্রক্রিয়া সহজ রাখা এবং কনফার্মেশনের পর উভয় পক্ষের নিরাপদ সংযোগ স্থাপন।
 
 ---
 
 ## 3. Core Feature Specifications (In Scope)
-### Feature A: [Feature Name]
-- **Description:** [What it does]
-- **User Flow:**
-  1. User triggers action X
-  2. System processes Y
-  3. Output Z is displayed/returned
-- **Acceptance Criteria:** [Specific conditions that prove it works]
 
-### Feature B: [Feature Name]
-- **Description:** [What it does]
-- **Acceptance Criteria:** [Specific conditions that prove it works]
+### Feature A: Guardian Tuition Post (`/post-tuition`)
+- **Description:** অভিভাবক কোনো লগইন ছাড়াই টিউশন রিকয়ারমেন্ট সাবমিট করবেন।
+- **User Flow:**
+  1. অভিভাবক ফর্ম পূরণ করেন (শ্রেণি, বিষয়, মাধ্যম, এলাকা, সম্ভাব্য বেতন, জেন্ডার পছন্দ, অভিভাবকের নাম ও ফোন নম্বর)।
+  2. সিস্টেমে জবটি `PENDING_REVIEW` স্ট্যাটাসে সেভ হয়।
+  3. কনফার্মেশন স্ক্রিন দেখানো হয়।
+- **Acceptance Criteria:** ফোন নম্বর পাবলিক কোথাও দেখাবে না। ডাটাবেজে সঠিক তথ্য সেভ হবে।
+
+### Feature B: Admin Verification & Job Moderation (`/admin/jobs`)
+- **Description:** অ্যাডমিন ফোন কলের মাধ্যমে অভিভাবকের তথ্য যাচাই করে জব অ্যাপ্রুভ বা রিজেক্ট করবেন।
+- **User Flow:**
+  1. অ্যাডমিন ড্যাশবোর্ডে `PENDING_REVIEW` জব দেখেন।
+  2. অভিভাবককে কল করে তথ্য নিশ্চিত করেন।
+  3. অ্যাপ্রুভ করলে স্ট্যাটাস হয় `OPEN` এবং `publishedAt` সেট হয় (যা পাবলিক বোর্ডে ৩০ দিন লাইভ থাকে)। বাতিল করলে `CANCELLED`।
+- **Acceptance Criteria:** শুধুমাত্র অনুমোদিত (`OPEN`) জবগুলো পাবলিক জব বোর্ডে প্রদর্শিত হবে।
+
+### Feature C: Tutor Registration & Profile (`/register`, `/dashboard/profile`)
+- **Description:** টিউটররা সাইন আপ করে প্রোফাইল তৈরি ও আপডেট করতে পারবেন।
+- **User Flow:**
+  1. টিউটর ইমেইল ও পাসওয়ার্ড দিয়ে অ্যাকাউন্ট খোলেন (রোল: `TUTOR`)।
+  2. প্রোফাইলে শিক্ষা, বিষয়, শ্রেণি, মাধ্যম, প্রত্যাশিত বেতন ও ফোন নম্বর যুক্ত করেন।
+- **Acceptance Criteria:** পাবলিক প্রোফাইলে ফোন নম্বর কখনোই প্রদর্শিত হবে না।
+
+### Feature D: Job Board & Search/Filter (`/jobs`)
+- **Description:** টিউটররা জেলা, শ্রেণি, মাধ্যম ও জেন্ডার ফিল্টার করে টিউশন খুঁজতে পারবেন।
+- **Acceptance Criteria:** পাবলিশ হওয়ার ৩০ দিন পর জব অটো-হাইড হবে (`JOB_EXPIRY_DAYS = 30`)। কোনো পাবলিক পেজে অভিভাবকের ফোন নম্বর থাকবে না।
+
+### Feature E: Application Pipeline (`/admin/applications`, `/dashboard`)
+- **Description:** টিউটর জবে আবেদন করবেন। অ্যাডমিন আবেদন প্রসেস করবেন:
+  `APPLIED` → `SHORTLISTED` → `DEMO` → `CONFIRMED` → `COMPLETED` (বা `CANCELLED`)।
+- **Acceptance Criteria:** এক টিউটর একটি জবে একবারই আবেদন করতে পারবেন (`@@unique([jobId, tutorId])`)।
+
+### Feature F: Secure Contact Reveal (Dashboard only)
+- **Description:** জবটি `CONFIRMED` হওয়ার পর শুধুমাত্র সেই নির্দিষ্ট কনফার্মড টিউটর তার ড্যাশবোর্ডে অভিভাবকের ফোন নম্বর দেখতে পাবেন।
 
 ---
 
-## 4. Explicit Out-of-Scope (DO NOT BUILD)
-> *Crucial to prevent feature creep and AI drift during implementation.*
-
-- [ ] Feature X (e.g., No multi-tenancy in v1; single organization only)
-- [ ] Feature Y (e.g., No custom OAuth providers; email/password only)
-- [ ] Feature Z (e.g., No mobile app; responsive web only)
+## 4. Explicit Out-of-Scope (DO NOT BUILD — Hard Guardrails)
+- [x] **কোনো পেমেন্ট/কমিশন সিস্টেম নয়:** কোনো পেমেন্ট গেটওয়ে (bKash/Nagad/SSLCommerz/Stripe), সাবস্ক্রিপশন বা ফি ফিচার যোগ করা সম্পূর্ণ নিষিদ্ধ।
+- [x] **ডিরেক্ট মেসেজিং/মার্কেটপ্লেস নয়:** অ্যাডমিনের মিডিয়েশন ও কনফার্মেশনের আগে টিউটর ও অভিভাবক সরাসরি যোগাযোগ করতে পারবে না।
+- [x] **ইংরেজি UI নয়:** ব্যবহারকারী যা কিছু দেখবেন তা বাধ্যতামূলকভাবে প্রমিত বাংলায় হবে (কোড ও কমেন্ট ইংরেজিতে)।
+- [x] **ফেক ডেটা নয়:** কোনো ভুয়া টেস্টিমোনিয়াল, ফেক টিউটর সংখ্যা বা ফেক কাউন্টার থাকবে না।
+- [x] **v1-এ অভিভাবক অ্যাকাউন্ট নয়:** অভিভাবক লগইন ছাড়াই পোস্ট করবেন (অ্যাকাউন্ট ফিচার v2-এর জন্য সংরক্ষিত)।
 
 ---
 
 ## 5. Non-Negotiable Constraints & Guarantees
-- Performance requirement: [e.g. P95 latency < 200ms]
-- Security requirement: [e.g. All API routes require authenticated JWT bearer token]
-- Storage requirement: [e.g. Temporary files must be purged after 24 hours]
-
+- **প্রাইভেসি রুল:** কোনো পাবলিক পেজে কারো ফোন নম্বর কখনো দৃশ্যমান হবে না।
+- **কনফিগারেশন সেন্ট্রালাইজেশন:** সাইটের নাম বা কনস্ট্যান্ট কোনো পেজে হার্ডকোড করা যাবে না, সবকিছু `lib/site.ts` থেকে লোড হতে হবে।
+- **টাইপ সেফটি ও কোড কোয়ালিটি:** প্রতি স্টেপে `tsc --noEmit` এবং `npm run build` পাস হতে হবে।

@@ -1,36 +1,80 @@
-# 06. Sequential Atomic Execution Plan
+# 06. Atomic Implementation & Launch Plan
 
-> **Strict Rule:** Complete steps in exact order (`1 -> 2 -> 3...`). NEVER mark `[x]` until EVERY command in that step's `Verification Gate` passes with exit code `0`.
+> **নিয়ম:** একবারে মাত্র একটি আনচেকড স্টেপে কাজ করতে হবে। প্রতিটি স্টেপের জন্য নির্ধারিত `Verification Gate` পাস করার পর তবেই সেই স্টেপকে `[x]` হিসেবে চিহ্নিত করা যাবে।
 
 ---
 
-- [ ] Step 1: Project Scaffold, Config & Design Tokens
-  - **Vault Refs:** `vault/03-TOKENS.md`, `vault/04-STACK.md`
-  - **Target Files:** `package.json`, `tsconfig.json`, `src/config/tokens.ts`
-  - **Done Criteria:** Approved packages installed; strict TypeScript enabled; design tokens exported cleanly from a single config file.
-  - **Verification Gate:** `npx tsc --noEmit && npm run build`
+## Phase 1: Local Setup & Environment Verification
 
-- [ ] Step 2: Database Schema, Types & Validation Tests
-  - **Vault Refs:** `vault/05-SCHEMA.md`
-  - **Target Files:** `src/db/schema.ts`, `src/tests/schema.test.ts`
-  - **Done Criteria:** Exact schema & Zod/TS interfaces match `05-SCHEMA.md`; boundary tests cover valid and invalid inputs.
-  - **Verification Gate:** `npx tsc --noEmit && npm test -- schema.test`
+### - [ ] Step 1: Environment & Database Configuration
+- **Goal:** `.env` ফাইল প্রস্তুত করে লোকাল PostgreSQL বা Neon ডাটাবেজের সাথে সংযোগ স্থাপন এবং স্কিমা মাইগ্রেশন যাচাই।
+- **Vault Refs:** `vault/04-STACK.md`, `vault/05-SCHEMA.md`
+- **Target Files:** `.env`
+- **Verification Gate:**
+  ```powershell
+  npx prisma migrate status
+  ```
+  *(Exit code 0 এবং ডাটাবেজ স্কিমা আপ-টু-ডেট হতে হবে)*
 
-- [ ] Step 3: Core State Machine & Business Logic
-  - **Vault Refs:** `vault/01-PRD.md`, `vault/02-STATE.md`, `vault/05-SCHEMA.md`
-  - **Target Files:** `src/modules/coreService.ts`, `src/tests/coreService.test.ts`
-  - **Done Criteria:** All allowed transitions work; forbidden transitions throw explicit typed errors; unit tests pass 100%.
-  - **Verification Gate:** `npx tsc --noEmit && npm test -- coreService.test`
+---
 
-- [ ] Step 4: API / UI Integration Layer
-  - **Vault Refs:** `vault/01-PRD.md`, `vault/03-TOKENS.md`, `vault/05-SCHEMA.md`
-  - **Target Files:** `src/routes/...`, `src/tests/integration.test.ts`
-  - **Done Criteria:** UI/API consumes real tokens & schemas; error/empty/loading states handled; integration tests pass.
-  - **Verification Gate:** `npx tsc --noEmit && npm test`
+### - [ ] Step 2: Sample Seed Data & Verification
+- **Goal:** ডেভেলপমেন্ট ও টেস্টের জন্য ডেমো ডাটাবেজ সিডিং রান করা (অ্যাডমিন, টিউটর ও জব স্যাম্পল)।
+- **Vault Refs:** `vault/04-STACK.md`
+- **Target Files:** `prisma/seed.mjs`
+- **Verification Gate:**
+  ```powershell
+  npm run db:seed
+  ```
+  *(Exit code 0 হতে হবে এবং কনসোলে ডেমো অ্যাকাউন্ট তথ্য প্রিন্ট হতে হবে)*
 
-- [ ] Step 5: End-to-End Verification & Production Build
-  - **Vault Refs:** `vault/01-PRD.md`, `vault/04-STACK.md`
-  - **Target Files:** *(No new features; verify full project)*
-  - **Done Criteria:** Clean lint, strict typecheck, 100% passing test suite, clean production build, and `vault/02-STATE.md` updated to `COMPLETE`.
-  - **Verification Gate:** `npm run lint && npx tsc --noEmit && npm test && npm run build`
+---
 
+### - [ ] Step 3: Full Codebase Build & Typecheck Gate
+- **Goal:** অ্যাপ্লিকেশনে কোনো টাইপ এরর বা বিল্ড সমস্যা নেই তা শতভাগ নিশ্চিত করা।
+- **Vault Refs:** `vault/04-STACK.md`
+- **Target Files:** Codebase overall
+- **Verification Gate:**
+  ```powershell
+  npm run typecheck && npm run build
+  ```
+  *(Exit code 0 হতে হবে)*
+
+---
+
+## Phase 2: Smoke Testing & Feature Flow Validation
+
+### - [ ] Step 4: End-to-End Flow Validation (Local Runtime)
+- **Goal:** লোকাল সার্ভার চালিয়ে প্রধান ৩টি কোর ফ্লো টেস্ট করা:
+  1. অভিভাবক হিসেবে টিউশন পোস্ট করা (`/post-tuition`) -> `PENDING_REVIEW` তৈরি।
+  2. অ্যাডমিন অ্যাকাউন্টে লগইন করে জব রিভিউ ও অ্যাপ্রুভ করা -> জবটি `OPEN` হওয়া।
+  3. টিউটর অ্যাকাউন্টে লগইন করে জবে আবেদন করা এবং কনফার্মেশনের পর ড্যাশবোর্ডে অভিভাবকের ফোন নম্বর প্রদর্শন যাচাই।
+- **Vault Refs:** `vault/01-PRD.md`, `vault/03-TOKENS.md`
+- **Verification Gate:**
+  Browser / API verification confirming:
+  - Phone number hidden on `/jobs` and `/tutors`.
+  - Phone number revealed only on `/dashboard` after `CONFIRMED`.
+
+---
+
+## Phase 3: Git & Deployment
+
+### - [ ] Step 5: Git Repository & Remote Setup
+- **Goal:** প্রজেক্ট ফোল্ডারে গিট রিপোজিটরি ইনিশিয়ালাইজ করা এবং রিমোট গিটহাব রিপোজিটরির সাথে লিংক করে কোড পুশ করা।
+- **Target Files:** `.gitignore`, git tree
+- **Verification Gate:**
+  ```powershell
+  git status
+  ```
+  *(Working tree clean এবং remote repository synched)*
+
+---
+
+### - [ ] Step 6: Vercel Deployment & Production Migration
+- **Goal:** Vercel-এ প্রজেক্ট ইমপোর্ট করা, Environment Variables সেট করা এবং প্রোডাকশন ডাটাবেজে মাইগ্রেশন চালানো।
+- **Vault Refs:** `vault/04-STACK.md`
+- **Verification Gate:**
+  ```powershell
+  npx prisma migrate deploy
+  ```
+  *(এবং লাইভ Vercel URL থেকে সাইট লোড হতে হবে)*

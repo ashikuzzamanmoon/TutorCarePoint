@@ -1,40 +1,35 @@
-# 02. Active State Machine & Execution Tracker
+# 02. Active State Machine & Execution State
 
-> **Live Checkpoint File:** Coding agent MUST update this file immediately after passing each step in `06-PLAN.md`.
-
----
-
-## 1. Execution Checkpoint
-- **Project Status:** `PLANNING` | `IN_PROGRESS` | `BLOCKED` | `COMPLETE` (Current: `PLANNING`)
-- **Last Completed Step:** `None`
-- **Active Step:** `Step 1`
-- **Active Blockers:** `None`
-
-### Checkpoint History Log
-| Step | Status | Completed At | Notes / Verified Gate |
-| :--- | :--- | :--- | :--- |
-| Step 0 | LOCKED | YYYY-MM-DD HH:MM | Vault initialized |
+## 1. Project Identity & Status
+- **Project:** TutorCarePoint (টিউটর কেয়ার পয়েন্ট)
+- **Architecture Version:** v1.0
+- **Current Lifecycle Phase:** v1 Codebase Built & Vault Locked — Setup & Launch Preparation
+- **Last Updated:** 2026-11-23
 
 ---
 
-## 2. Application Runtime State Machine
-> *Define every valid state transition so the agent never invents undefined UI/API states.*
+## 2. Active Execution State
+- **Current Active Step:** Step 1 (Environment Setup & Database Connectivity)
+- **Last Completed Step:** Step 0 (Context Architecture Vault Integration & Verification)
+- **Active Blockers:** None
 
-### Core Flow States
-- **`IDLE`**: Initial state before user/system input.
-- **`LOADING`**: Asynchronous operation in flight (show skeleton/spinner; disable duplicate submit).
-- **`SUCCESS`**: Operation succeeded with valid payload.
-- **`EMPTY`**: Valid response returned, zero records found (render actionable empty-state CTA).
-- **`ERROR`**: Operation failed cleanly with human-readable message and retry trigger.
+---
 
-### Allowed Transitions
-- `IDLE -> LOADING` (Trigger: User submits / Init runs)
-- `LOADING -> SUCCESS` (Trigger: HTTP 200 & schema validation passes)
-- `LOADING -> EMPTY` (Trigger: HTTP 200 & array length === 0)
-- `LOADING -> ERROR` (Trigger: HTTP 4xx/5xx or timeout > `TIMEOUT_MS`)
-- `ERROR -> LOADING` (Trigger: User clicks Retry)
+## 3. Completed Milestones Log
+- [x] **Milestone 0: Core Application Engineering (Completed Nov 22, 2026)**
+  - Next.js 16 + React 19 + Tailwind CSS v4 সেটআপ সম্পন্ন।
+  - Prisma 7 + PostgreSQL স্কিমা ও মাইগ্রেশন তৈরি।
+  - Auth.js v5 বেসড ক্রেডেনশিয়ালস ও রোল বেসড গার্ডস (Tutor/Admin)।
+  - সকল পাবলিক পেজ, টিউটর ড্যাশবোর্ড ও অ্যাডমিন প্যানেল তৈরি।
+  - `tsc --noEmit` এবং `npm run build` ক্লিন পাস।
+- [x] **Milestone 1: Context Architecture Vault Locked (Completed Nov 23, 2026)**
+  - `AGENTS.md` ও `vault/` আর্কিটেকচার ইন্টিগ্রেটেড।
+  - PRD, STATE, TOKENS, STACK, SCHEMA, PLAN স্পেসিফিকেশন ফাইলগুলো প্রজেক্টের সাথে অ্যালাইন করা হয়েছে।
 
-### Forbidden Transitions
-- Never jump directly from `ERROR` to `SUCCESS` without passing through `LOADING`.
-- Never allow concurrent `LOADING` triggers for the same mutation key.
+---
 
+## 4. Pending Execution Queue
+1. [ ] **Step 1:** `.env` কনফিগারেশন এবং লোকাল PostgreSQL ডাটাবেজে কানেকশন ও সিড ভেরিফিকেশন।
+2. [ ] **Step 2:** লোকাল ডেভেলপমেন্ট সার্ভারে অ্যান্ড-টু-অ্যান্ড ফ্লো স্মোক টেস্ট (টিউটর আবেদন, অ্যাডমিন রিভিউ, কন্টাক্ট রিভিল)।
+3. [ ] **Step 3:** গিট ইনিশিয়ালাইজেশন ও গিটহাব রিমোট পুশ।
+4. [ ] **Step 4:** Vercel ডেপ্লয়মেন্ট এবং প্রোডাকশন ডাটাবেজ মাইগ্রেশন।

@@ -1,51 +1,67 @@
-# 04. Technology Stack, Versions & Tooling
+# 04. Technology Stack & Environment Configuration
 
-> **Strict Environment Lock:** Agent must ONLY use libraries listed here. Introducing unapproved packages requires explicit user confirmation.
-
----
-
-## 1. Core Runtime & Language
-- **Runtime:** [e.g. Node.js `v24.x` / Python `3.12`]
-- **Language:** [e.g. TypeScript `5.x` (`strict: true`)]
-- **Package Manager:** [e.g. `npm` / `pnpm` / `uv`]
-
----
-
-## 2. Approved Frameworks & Dependencies
-| Category | Package | Target Version | Purpose |
-| :--- | :--- | :--- | :--- |
-| Framework | [e.g. Next.js / FastAPI] | `^x.y.z` | Core app router / API |
-| Validation | [e.g. zod / pydantic] | `^x.y.z` | Runtime schema validation |
-| Testing | [e.g. vitest / pytest] | `^x.y.z` | Unit & integration test suite |
-| Styling | [e.g. TailwindCSS] | `^x.y.z` | UI styling |
+## 1. Pinned Core Dependencies
+- **Runtime:** Node.js 20+
+- **Next.js:** `16.4.6` (App Router, Server Actions)
+- **React:** `19.3.0`
+- **TypeScript:** `5.9.3`
+- **Tailwind CSS:** `4.3.3` (with `@tailwindcss/turbopack`)
+- **Prisma ORM:** `7.10.1`
+- **Database Driver Adapter:** `@prisma/adapter-pg` `7.10.1`
+- **Database Engine:** PostgreSQL (Neon / Supabase Serverless PG)
+- **Authentication:** Auth.js v5 (`next-auth`: `5.0.0-beta.32` + `@auth/prisma-adapter`: `2.11.3`)
+- **Password Security:** `bcryptjs`: `3.0.3`
+- **Schema Validation:** `zod`: `4.6.7`
+- **Styling Helpers:** `clsx`: `2.1.1`, `tailwind-merge`: `3.7.1`
 
 ---
 
-## 3. Forbidden Libraries & Anti-Patterns
-- **DO NOT** install `moment.js` (use native `Intl` or `date-fns`).
-- **DO NOT** disable TypeScript checks (`@ts-ignore`, `any`).
-- **DO NOT** bypass schema validation on API inputs.
-- **DO NOT** hardcode secrets/keys in source files (use `.env`).
+## 2. Forbidden Libraries & Practices (DO NOT INSTALL)
+- **NO Payment Gateways:** bKash, Nagad, Rocket, SSLCommerz, Shurjopay, Stripe, Paddle ইত্যাদি কোনো পেমেন্ট এসডিকে নিষিদ্ধ।
+- **NO Heavy UI Kits:** Material UI, AntD, Chakra ইত্যাদি ভারী লাইব্রেরি যা প্রজেক্টের লাইটওয়েট ডিজাইন ও পারফরম্যান্স নষ্ট করে।
+- **NO Client-side Heavy Graph/Analytics:** অপ্রয়োজনীয় গ্রাফ বা চার্ট যা কমদামী মোবাইলের লোডিং গতি কমায়।
 
 ---
 
-## 4. Canonical Verification Commands
-> *Every Verification Gate in `06-PLAN.md` builds on these commands:*
+## 3. Environment Variables Specification
+`.env` ফাইলে অবশ্যই নিচের ভেরিয়েবলগুলো থাকতে হবে:
 
-- **Typecheck:** `npx tsc --noEmit`
-- **Lint:** `npm run lint`
-- **Unit / Integration Tests:** `npm test`
-- **Production Build:** `npm run build`
+```env
+# PostgreSQL connection string (Neon or Supabase free tier)
+DATABASE_URL="postgresql://user:password@host/dbname?sslmode=require"
 
----
+# Auth.js secret (generate using: openssl rand -base64 32)
+AUTH_SECRET="your-generated-auth-secret"
 
-## 5. Standard Directory Layout
-```text
-src/
-├── config/          # Env & validated constants
-├── db/              # Schema, migrations, client
-├── modules/         # Domain logic (services, validators)
-├── routes/          # API or UI routes
-└── tests/           # Test suites mirroring src/
+# Canonical App URL
+AUTH_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
+*Prisma 7 Quirk:* লোকাল শেল থেকে মাইগ্রেশন চালানোর সময় যদি `DATABASE_URL` পেতে সমস্যা হয়, তবে শেলের এনভায়রনমেন্টে ভেরিয়েবলটি লোড থাকতে হবে।
+
+---
+
+## 4. Verification Gate Commands
+যেকোনো স্টেপ শেষ করার পর এই কমান্ডগুলো দ্বারা নিশ্চিত হতে হবে:
+
+- **Typecheck:**
+  ```powershell
+  npm run typecheck   # executes: tsc --noEmit
+  ```
+- **Production Build:**
+  ```powershell
+  npm run build       # executes: next build
+  ```
+- **Prisma Migration (Local):**
+  ```powershell
+  npx prisma migrate dev
+  ```
+- **Database Seed (Local Demo Data):**
+  ```powershell
+  npm run db:seed
+  ```
+- **Prisma Studio:**
+  ```powershell
+  npm run db:studio
+  ```
